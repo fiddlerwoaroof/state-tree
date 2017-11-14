@@ -2,7 +2,6 @@ import StateContainer, {LensWrapper, lensTransformer} from '../src/state_contain
 import sinon from 'sinon';
 
 import R from 'ramda';
-window.R = R;
 
 test("initial state setting works", () => {
    const container = new StateContainer({foo: 'bar'});
@@ -38,7 +37,7 @@ test("returned state cannot modify internal state", () => {
     expect(container.get('foo')).toBe('bar')//, "container state was not modified by output state");
 });
 
-test("onUpdate listeners are fired when set is called", (assert) => {
+test("onUpdate listeners are fired when set is called", () => {
     let container, listener;
 
     container = new StateContainer({foo: 'bar'});
@@ -69,8 +68,11 @@ test("onUpdate listeners are fired when setState is called", () => {
 
     container.setState({'foo': 'hi'});
 
-    expect(JSON.stringify(listener.args[0])).toBe(JSON.stringify([{foo: 'bar'}, {foo: 'hi'}]));
-
+    expect(JSON.stringify(listener.args[0]))
+        .toBe(JSON.stringify(
+            [{ foo: 'bar' },
+             { foo: 'hi' }]
+        ));
 });
 
 test("recording works", () => {
