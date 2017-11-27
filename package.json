@@ -4,7 +4,8 @@
   "description": "",
   "main": "src/state_container.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "babel": "babel src/ -d dist/"
   },
   "author": "",
   "license": "ISC",
