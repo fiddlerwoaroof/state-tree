@@ -12,8 +12,8 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-jest": "^21.2.0",
-    "babel-preset-env": "^1.6.1",
-    "eslint": "^4.11.0",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^4.19.1",
     "jest": "^21.2.1",
     "regenerator-runtime": "^0.11.0",
     "webpack": "^3.8.1"
@@ -21,7 +21,31 @@
   "dependencies": {
     "immutable": "^3.8.2",
     "ramda": "^0.25.0",
-    "sinon": "^4.1.2"
+    "sinon": "^4.5.0"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es6": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "sourceType": "module"
+    },
+    "rules": {
+      "indent": [
+        "error",
+        4
+      ],
+      "linebreak-style": [
+        "error",
+        "unix"
+      ],
+      "semi": [
+        "error",
+        "always"
+      ]
+    }
   },
   "babel": {
     "presets": [
