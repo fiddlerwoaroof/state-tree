@@ -60,15 +60,29 @@ test("onUpdate listeners are fired when set is called", () => {
 });
 
 test("onUpdate listeners are fired when setState is called", () => {
-    const container = new StateContainer({foo: 'bar'});
-    const listener = sinon.spy();
+    let container = new StateContainer({foo: 'bar'});
+    let listener = sinon.spy();
 
     container.onUpdate(listener);
 
     container.setState({'foo': 'hi'});
 
     expect(JSON.stringify(listener.args[0]))
-        .toBe(JSON.stringify(
+        .toEqual(JSON.stringify(
+            [{ foo: 'bar' },
+             { foo: 'hi' }]
+        ));
+
+    container = new StateContainer({foo: 'bar'});
+    const recorder = container.getRecorder();
+    listener = sinon.spy();
+
+    recorder.onUpdate(listener);
+
+    recorder.setState({'foo': 'hi'});
+
+    expect(JSON.stringify(listener.args[0]))
+        .toEqual(JSON.stringify(
             [{ foo: 'bar' },
              { foo: 'hi' }]
         ));

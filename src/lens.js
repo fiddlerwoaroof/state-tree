@@ -27,54 +27,36 @@ export function lensTransformer(
 
 export function makeLens(key, self) {
     const createLens = (keyPath) => {
-
         return {
             get() {
-                let result = self._getState().getIn(keyPath);
+                let result = self._currentState.getIn(keyPath);
                 if (result && result.toJS !== undefined) {
                     result = result.toJS();
                 }
                 return result;
             },
             set(val) {
-                const oldState = self._getState();
+                const oldState = self._currentState;
 
-                self.localStore = self.localStore.setIn(keyPath, fromJS(val));
-                this._addSetAction(keyPath, R.clone(val));
-
-                self[fireListeners](oldState, self._getState());
-            },
-
-            _prepareForSet(keyPath) {
-                if (self.localStore.getIn(keyPath) === undefined) {
+                if (self._currentState.getIn(keyPath) === undefined) {
                     for (let x = 0; x < keyPath.length; x++) {
                         const subPath = keyPath.slice(0, x);
-                        if (self.localStore.getIn(subPath) === undefined && self.localStore.hasIn(subPath)) {
-                            self.localStore = self.localStore.setIn(subPath, Map());
+                        if (self._currentState.getIn(subPath) === undefined && self._currentState.hasIn(subPath)) {
+                            self._currentState = self._currentState.setIn(subPath, Map());
                         }
                     }
                 }
+
+                self._currentState = self._currentState.setIn(keyPath, fromJS(val));
+                self[fireListeners](oldState, self._currentState);
             },
-
-            _addSetAction(keyPath, val) {
-                let lastAction = self.actions[self.actions.length - 1];
-                if (lastAction && (lastAction[0][0] === 'lensFor') && R.equals(lastAction[0][1], keyPath)) {
-                    self.actions.pop();
-                }
-
-                self.actions.push([
-                    ['lensFor', keyPath],
-                    ['set', val]
-                ]);
-            },
-
             lensFor(key) {
                 let subPath = key instanceof Array ? key : [key];
                 return createLens([...keyPath, ...subPath]);
             },
 
-            withValue(cb, ...additional) {
-                return cb(this.get(), ...additional);
+            withValue(cb, ...rest) {
+                return cb(this.get(), ...rest);
             },
 
             swap(cb) {
