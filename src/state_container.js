@@ -121,8 +121,8 @@ export default function StateContainer(data = {}) {
                         return createLens([...keyPath, ...subPath]);
                     },
 
-                    withValue(cb) {
-                        return cb(this.get());
+                    withValue(cb, ...rest) {
+                        return cb(this.get(), ...rest);
                     },
 
                     swap(cb) {

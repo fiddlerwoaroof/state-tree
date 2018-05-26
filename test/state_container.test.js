@@ -1,5 +1,6 @@
 import StateContainer, {lensTransformer} from '../src/state_container';
 import sinon from 'sinon';
+import * as R from 'ramda';
 
 test("initial state setting works", () => {
    const container = new StateContainer({foo: 'bar'});
@@ -199,9 +200,9 @@ test("recorder from recorder also records - infinite turtles", () => {
 });
 
 test("lenses work", () => {
-    const container = new StateContainer({foo: {bar: 1, baz: 2}});
-    let lens, sublens;
+    let container, lens, sublens;
 
+    container = new StateContainer({ foo: { bar: 1, baz: 2 } });
     lens = container.lensFor('foo');
     expect(lens.get()).toEqual({bar:1, baz: 2});
 
@@ -220,7 +221,40 @@ test("lenses work", () => {
 
     lens.set(3);
     expect(lens.get()).toBe(3);
+    expect(lens.withValue(R.identity)).toBe(3);
+    expect(lens.withValue((value,prop) => R.assoc(prop, value, {b: 2, a:1}), 'a')).toEqual({a:3, b:2});
     expect(container.getState()).toEqual({foo: 3});
+
+    expect(lens.swap(R.assoc('a', R.__, {b: 2, a:1}))).toEqual({a:3, b:2});
+    expect(lens.get()).toEqual({a:3, b:2});
+
+    container = new StateContainer({ foo: { bar: 1, baz: 2 } });
+    const recorder = container.getRecorder();
+
+    lens = recorder.lensFor('foo');
+    expect(lens.get()).toEqual({bar:1, baz: 2});
+
+    sublens = lens.lensFor('bar');
+    expect(sublens.get()).toBe(1);
+
+    sublens.set(2);
+    expect(sublens.get()).toBe(2, 'changing a nested lens updates its value');
+    expect(lens.get()).toEqual({bar:2, baz: 2}, 'changing a nested lens updates its parent\'s value');
+    expect(recorder.getState()).toEqual({foo: {bar:2, baz: 2}}, 'changing a nested lens updates recorder state');
+
+    lens.set({bar: 3});
+    expect(sublens.get()).toBe(3, 'changing parent lens to complex value updates nested lens value');
+    expect(lens.get()).toEqual({bar:3}, 'changing parent lens to complex value updates itself');
+    expect(recorder.getState()).toEqual({foo: {bar:3}}, 'changing parent lens to complex value updates recorder');
+
+    lens.set(3);
+    expect(lens.get()).toBe(3);
+    expect(lens.withValue(R.identity)).toBe(3);
+    expect(lens.withValue((value,prop) => R.assoc(prop, value, {b: 2, a:1}), 'a')).toEqual({a:3, b:2});
+    expect(recorder.getState()).toEqual({foo: 3});
+
+    expect(lens.swap(R.assoc('a', R.__, {b: 2, a:1}))).toEqual({a:3, b:2});
+    expect(lens.get()).toEqual({a:3, b:2});
 });
 
 test("lenses treat undefined properly", () => {
