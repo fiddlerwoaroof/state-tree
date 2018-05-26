@@ -3,111 +3,23 @@ import {
     Map,
     fromJS
 } from 'immutable';
-
-const noOpTransform = val => val;
-
-export function lensTransformer(
-    lens,
-    getTransform = noOpTransform,
-    setTransform = noOpTransform
-) {
-    return {
-        get: () => getTransform(lens.get()),
-        set: (val) => lens.set(setTransform(val)),
-        withValue(cb) {
-            return cb(this.get());
-        },
-
-    };
-}
-
-let Symbol = (window['Symbol'] !== undefined) ? window['Symbol'] : x => `_Symbol__${x}`;
-
-let fireListeners = Symbol('fireListeners');
-
-function makeLens(key, self) {
-    const createLens = (keyPath) => {
-        const lens = R.lensPath(keyPath);
-
-        return {
-            get() {
-                let result = self._getState().getIn(keyPath);
-                if (result && result.toJS !== undefined) {
-                    result = result.toJS();
-                }
-                return result;
-            },
-            set(val) {
-                const oldState = self._getState();
-
-                self.localStore = self.localStore.setIn(keyPath, fromJS(val));
-                this._addSetAction(keyPath, R.clone(val));
-
-                self[fireListeners](oldState, self._getState());
-            },
-
-            _prepareForSet(keyPath) {
-                if (self.localStore.getIn(keyPath) === undefined) {
-                    for (let x = 0; x < keyPath.length; x++) {
-                        const subPath = keyPath.slice(0, x);
-                        if (self.localStore.getIn(subPath) === undefined && self.localStore.hasIn(subPath)) {
-                            self.localStore = self.localStore.setIn(subPath, Map());
-                        }
-                    }
-                }
-            },
-
-            _addSetAction(keyPath, val) {
-                let lastAction = self.actions[self.actions.length - 1];
-                if (lastAction && (lastAction[0][0] === 'lensFor') && R.equals(lastAction[0][1], keyPath)) {
-                    self.actions.pop();
-                }
-
-                self.actions.push([
-                    ['lensFor', keyPath],
-                    ['set', val]
-                ]);
-            },
-
-            lensFor(key) {
-                let subPath = key instanceof Array ? key : [key];
-                return createLens([...keyPath, ...subPath]);
-            },
-
-            withValue(cb) {
-                return cb(this.get());
-            }
-        };
-    };
-
-    return createLens(key instanceof Array ? key : [key]);
-};
-
+import { makeLens, lensTransformer, fireListeners } from './lens';
 
 function RecordingStateContainer(container) {
     this.localStore = Map();
     this.container = container;
     this.listeners = [];
     this.actions = [];
-};
-
+}
 
 RecordingStateContainer.prototype = {
-    set(key, value) {
-        this.lensFor(key).set(value);
-    },
+    set(key, value) { this.lensFor(key).set(value); },
 
-    get(key) {
-        return this.lensFor(key).get();
-    },
+    get(key) { return this.lensFor(key).get(); },
 
     setState(newState) {
         this.localStore = this.localStore.merge(newState);
-        this.actions = [
-            [
-                ['setState', this.localStore]
-            ]
-        ];
+        this.actions = [ [ ['setState', this.localStore] ] ];
     },
 
     _getState() {
@@ -163,24 +75,24 @@ RecordingStateContainer.prototype = {
 
 };
 
-export default function StateContainer(data = {}, computed = {}) {
+export { lensTransformer };
+
+export default function StateContainer(data = {}) {
 
 
     var listeners = [];
     var state = [fromJS(data)];
 
-    function fireListeners(oldState, newState) {
-        listeners.forEach((listener) => {
-            listener(oldState, newState);
-        });
-    }
-
     return {
+        [fireListeners](oldState, newState) {
+            listeners.forEach((listener) => {
+                listener(oldState, newState);
+            });
+        },
+
         lensFor(key) {
             let self = this;
             const createLens = (keyPath) => {
-                const lens = R.lensPath(keyPath);
-
                 return {
                     get() {
                         let result = self._currentState.getIn(keyPath);
@@ -202,7 +114,7 @@ export default function StateContainer(data = {}, computed = {}) {
                         }
 
                         self._currentState = self._currentState.setIn(keyPath, fromJS(val));
-                        fireListeners(oldState, self._currentState);
+                        self[fireListeners](oldState, self._currentState);
                     },
                     lensFor(key) {
                         let subPath = key instanceof Array ? key : [key];
@@ -211,6 +123,11 @@ export default function StateContainer(data = {}, computed = {}) {
 
                     withValue(cb) {
                         return cb(this.get());
+                    },
+
+                    swap(cb) {
+                        this.set(cb(this.get()));
+                        return this.get();
                     }
                 };
             };
@@ -250,14 +167,10 @@ export default function StateContainer(data = {}, computed = {}) {
          * */
         setState(newState) {
             const oldState = this._currentState;
-            let mergedState;
 
             this._currentState = this._currentState.merge(newState);
 
-            fireListeners(oldState, this._currentState);
-        },
-        beforeUpdate(listener) {
-
+            this[fireListeners](oldState, this._currentState);
         },
         onUpdate(listener) {
             listeners.push(listener);

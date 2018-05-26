@@ -1,7 +1,5 @@
-import StateContainer, {LensWrapper, lensTransformer} from '../src/state_container';
+import StateContainer, {lensTransformer} from '../src/state_container';
 import sinon from 'sinon';
-
-import R from 'ramda';
 
 test("initial state setting works", () => {
    const container = new StateContainer({foo: 'bar'});
