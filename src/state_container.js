@@ -32,8 +32,8 @@ let common_state = {
 
     onUpdate(listener) {
         this.listeners.push(listener);
-        return function () {
-            this.listeners = this.listeners.splice(this.listeners.indexOf(listener), 1);
+        return () => {
+            this.listeners.splice(this.listeners.indexOf(listener), 1);
         };
     },
 

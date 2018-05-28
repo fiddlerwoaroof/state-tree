@@ -61,30 +61,64 @@ test("onUpdate listeners are fired when set is called", () => {
 
 test("onUpdate listeners are fired when setState is called", () => {
     let container = new StateContainer({foo: 'bar'});
-    let listener = sinon.spy();
+    let listener1 = sinon.spy();
+    let listener2 = sinon.spy();
 
-    container.onUpdate(listener);
+    let rfn1 = container.onUpdate(listener1);
+    let rfn2 = container.onUpdate(listener2);
 
     container.setState({'foo': 'hi'});
+    rfn1();
+    container.setState({'foo': 'unfoo'});
 
-    expect(JSON.stringify(listener.args[0]))
+    expect(listener1.args.length).toBe(1);
+    expect(JSON.stringify(listener1.args[0]))
         .toEqual(JSON.stringify(
             [{ foo: 'bar' },
              { foo: 'hi' }]
         ));
 
-    container = new StateContainer({foo: 'bar'});
-    const recorder = container.getRecorder();
-    listener = sinon.spy();
-
-    recorder.onUpdate(listener);
-
-    recorder.setState({'foo': 'hi'});
-
-    expect(JSON.stringify(listener.args[0]))
+    expect(listener2.args.length).toBe(2);
+    expect(JSON.stringify(listener2.args[0]))
         .toEqual(JSON.stringify(
             [{ foo: 'bar' },
              { foo: 'hi' }]
+        ));
+    expect(JSON.stringify(listener2.args[1]))
+        .toEqual(JSON.stringify(
+            [{ foo: 'hi' },
+             { foo: 'unfoo' }]
+        ));
+
+    container = new StateContainer({foo: 'bar'});
+    const recorder = container.getRecorder();
+    listener1 = sinon.spy();
+    listener2 = sinon.spy();
+
+    rfn1 = recorder.onUpdate(listener1);
+    rfn2 = recorder.onUpdate(listener2);
+
+    recorder.setState({'foo': 'hi'});
+    rfn1();
+    recorder.setState({'foo': 'unfoo'});
+
+    expect(listener1.args.length).toBe(1);
+    expect(JSON.stringify(listener1.args[0]))
+        .toEqual(JSON.stringify(
+            [{ foo: 'bar' },
+             { foo: 'hi' }]
+        ));
+
+    expect(listener2.args.length).toBe(2);
+    expect(JSON.stringify(listener2.args[0]))
+        .toEqual(JSON.stringify(
+            [{ foo: 'bar' },
+             { foo: 'hi' }]
+        ));
+    expect(JSON.stringify(listener2.args[1]))
+        .toEqual(JSON.stringify(
+            [{ foo: 'hi' },
+             { foo: 'unfoo' }]
         ));
 });
 
