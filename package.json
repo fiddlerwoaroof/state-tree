@@ -1,7 +1,7 @@
 {
-  "name": "state_container",
+  "name": "state-container",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple tree-based state container that provides an alternative state model to redux",
   "main": "dist/state_container.js",
   "scripts": {
     "test": "jest",

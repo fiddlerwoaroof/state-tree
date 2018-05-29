@@ -1,8 +1,4 @@
-import * as R from 'ramda';
-import {
-    Map,
-    fromJS
-} from 'immutable';
+import { Map, fromJS } from 'immutable';
 
 let Symbol = (window['Symbol'] !== undefined) ? window['Symbol'] : x => `_Symbol__${x}`;
 
