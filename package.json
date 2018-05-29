@@ -1,5 +1,5 @@
 {
-  "name": "state-container",
+  "name": "continix",
   "version": "1.0.0",
   "description": "A simple tree-based state container that provides an alternative state model to redux",
   "main": "dist/state_container.js",
