@@ -19,4 +19,6 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
 
       # run tests!
+      - run: npx eslint
       - run: npm test
+      - run: npm run babel
