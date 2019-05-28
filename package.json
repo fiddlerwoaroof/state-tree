@@ -16,7 +16,7 @@
     "eslint": "^5.16.0",
     "jest": "^21.2.1",
     "regenerator-runtime": "^0.13.2",
-    "webpack": "^3.8.1"
+    "webpack": "^4.32.2"
   },
   "dependencies": {
     "immutable": "^3.8.2",
