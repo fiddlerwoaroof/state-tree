@@ -11,7 +11,7 @@
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-jest": "^21.2.0",
+    "babel-jest": "^24.8.0",
     "babel-preset-env": "^1.7.0",
     "eslint": "^4.19.1",
     "jest": "^21.2.1",
