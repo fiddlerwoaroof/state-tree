@@ -10,18 +10,20 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-jest": "^21.2.0",
-    "babel-preset-env": "^1.7.0",
-    "eslint": "^4.19.1",
-    "jest": "^21.2.1",
-    "regenerator-runtime": "^0.11.0",
-    "webpack": "^3.8.1"
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.4.2",
+    "eslint": "^5.16.0",
+    "jest": "^24.8.0",
+    "regenerator-runtime": "^0.13.2",
+    "webpack": "^4.32.2"
   },
   "dependencies": {
     "immutable": "^3.8.2",
-    "ramda": "^0.25.0",
-    "sinon": "^4.5.0"
+    "ramda": "^0.26.1",
+    "sinon": "^7.3.2"
   },
   "eslintConfig": {
     "env": {
@@ -49,12 +51,12 @@
   },
   "babel": {
     "presets": [
-      "env"
+      "@babel/preset-env"
     ],
     "env": {
       "test": {
         "presets": [
-          "env"
+          "@babel/preset-env"
         ]
       }
     }
