@@ -63,7 +63,7 @@
       }
     }
   },
-    "prettier": {
+  "prettier": {
     "trailingComma": "es5",
     "jsxBracketSameLine": true,
     "arrowParens": "avoid"
