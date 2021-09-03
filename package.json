@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/cli": "^7.14.3",
+    "@babel/cli": "^7.15.4",
     "@babel/core": "^7.14.3",
     "@babel/preset-env": "^7.14.2",
     "babel-core": "^7.0.0-bridge.0",
@@ -20,7 +20,7 @@
     "jest": "^26.6.3",
     "prettier": "^2.3.0",
     "regenerator-runtime": "^0.13.7",
-    "webpack": "^5.37.0"
+    "webpack": "^5.51.2"
   },
   "dependencies": {
     "immutable": "^3.8.2",
