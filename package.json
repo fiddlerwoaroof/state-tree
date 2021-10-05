@@ -67,5 +67,8 @@
     "trailingComma": "es5",
     "jsxBracketSameLine": true,
     "arrowParens": "avoid"
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
   }
 }
