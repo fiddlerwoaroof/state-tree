@@ -23,7 +23,7 @@
     "webpack": "^5.88.2"
   },
   "dependencies": {
-    "immutable": "^4.3.0",
+    "immutable": "^4.3.4",
     "ramda": "^0.29.0",
     "sinon": "^15.2.0"
   },
