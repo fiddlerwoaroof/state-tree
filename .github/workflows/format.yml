@@ -1,7 +1,6 @@
 name: Format (prettier)
 
 on:
-  push:
   pull_request:
     paths:
       - "**.css"
@@ -11,11 +10,10 @@ on:
 jobs:
   prettier:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.head_ref }}
-
+      - uses: actions/checkout@v3
 
       - name: Install
         run: npm ci
