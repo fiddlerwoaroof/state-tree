@@ -19,7 +19,7 @@
     "eslint": "^8.56.0",
     "jest": "^27.5.1",
     "prettier": "^3.2.5",
-    "regenerator-runtime": "^0.14.0",
+    "regenerator-runtime": "^0.14.1",
     "webpack": "^5.90.3"
   },
   "dependencies": {
