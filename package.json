@@ -20,7 +20,7 @@
     "jest": "^27.5.1",
     "prettier": "^3.4.2",
     "regenerator-runtime": "^0.14.1",
-    "webpack": "^5.97.1"
+    "webpack": "^5.98.0"
   },
   "dependencies": {
     "immutable": "^5.0.3",
