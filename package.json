@@ -25,8 +25,8 @@
   },
   "dependencies": {
     "immutable": "^5.1.8",
-    "ramda": "^0.31.3",
-    "sinon": "^21.0.0"
+    "ramda": "^0.32.0",
+    "sinon": "^22.1.0"
   },
   "eslintConfig": {
     "env": {
