@@ -16,7 +16,7 @@ export default [
       indent: ["error", 2],
       "linebreak-style": ["error", "unix"],
       semi: ["error", "always"],
-      "no-unused-vars": ["error", { "caughtErrorsIgnorePattern": "^_" }],
+      "no-unused-vars": ["error", { caughtErrorsIgnorePattern: "^_" }],
     },
   },
   {
