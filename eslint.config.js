@@ -5,7 +5,7 @@ export default [
   js.configs.recommended,
   {
     languageOptions: {
-      ecmaVersion: 2015,
+      ecmaVersion: "latest",
       sourceType: "module",
       globals: {
         ...globals.browser,
@@ -16,6 +16,15 @@ export default [
       indent: ["error", 2],
       "linebreak-style": ["error", "unix"],
       semi: ["error", "always"],
+      "no-unused-vars": ["error", { "caughtErrorsIgnorePattern": "^_" }],
+    },
+  },
+  {
+    files: ["test/**/*.js", "**/*.test.js"],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
     },
   },
 ];
