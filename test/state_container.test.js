@@ -92,7 +92,7 @@ test("onUpdate listeners are fired when setState is called", () => {
   listener2 = sinon.spy();
 
   rfn1 = recorder.onUpdate(listener1);
-  rfn2 = recorder.onUpdate(listener2);
+  rfn2 = recorder.onUpdate(listener2); // eslint-disable-line no-unused-vars
 
   recorder.setState({ foo: "hi" });
   rfn1();
@@ -153,8 +153,8 @@ test("recording works", () => {
   let err = 42;
   try {
     otherContainer.commit(recorder);
-  } catch (e) {
-    err = e;
+  } catch (_e) {
+    err = _e;
   }
   expect(err instanceof Error).toBe(true); //, 'throws an error on invalid commit');
 });
@@ -350,7 +350,7 @@ test("lenses treat undefined properly", () => {
 
   try {
     sublens.set(2);
-  } catch (e) {
+  } catch (_e) {
     // nothing
   }
   expect(sublens.get()).toBe(2, "changing a nested lens updates its value");
@@ -369,7 +369,7 @@ test("lenses treat undefined properly", () => {
 
   try {
     lens.set(2);
-  } catch (e) {
+  } catch (_e) {
     // nothing
   }
   expect(lens.get()).toBe(2, "changing a lens updates its value");
@@ -380,7 +380,7 @@ test("lenses treat undefined properly", () => {
 
   try {
     lens.set(2);
-  } catch (e) {
+  } catch (_e) {
     // nothing
   }
 
@@ -400,7 +400,7 @@ test("returned values are just Javascript objects", () => {
 
 test("lensFor accepts array paths", () => {
   const container = new StateContainer({ foo: { bar: 1, baz: { qwerty: 2 } } });
-  let lens, sublens;
+  let lens;
 
   lens = container.lensFor(["foo", "bar"]);
   expect(lens.get()).toBe(1);
@@ -424,7 +424,7 @@ test("lensFor indexes into arrays", () => {
   const container = new StateContainer({
     foo: { bar: [1], baz: { qwerty: 2 } },
   });
-  let lens, sublens;
+  let lens;
 
   lens = container.lensFor(["foo", "bar"]).lensFor(0);
   expect(lens.get()).toBe(1);
