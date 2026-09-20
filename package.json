@@ -72,7 +72,10 @@
   "jest": {
     "testEnvironment": "jsdom",
     "testEnvironmentOptions": {
-      "customExportConditions": ["require", "default"]
+      "customExportConditions": [
+        "require",
+        "default"
+      ]
     }
   }
 }
