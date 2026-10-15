@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   build:
     docker:
@@ -22,3 +22,8 @@ jobs:
       - run: npx eslint
       - run: npm test
       - run: npm run babel
+
+workflows:
+  build:
+    jobs:
+      - build
