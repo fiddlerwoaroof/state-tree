@@ -28,3 +28,4 @@ export default [
     },
   },
 ];
+// keep: unlock required prettier check for CircleCI-only PRs
